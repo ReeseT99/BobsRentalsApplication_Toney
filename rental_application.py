@@ -260,6 +260,60 @@ def process_new_rental(shop, active_rentals, customer_number):
     return True
 
 #----------------------------------------------------------------------------
+# find_active_rental
+#----------------------------------------------------------------------------
+def find_active_rental(active_rentals, customer_number):
+    """Returns the matching rental that has not been returned yet."""
+
+    for active_rental in active_rentals:
+        if active_rental.customer_number == customer_number:
+            if active_rental.is_returned == False:
+                return active_rental
+    return None
+
+
+#----------------------------------------------------------------------------
+# process_rental_return
+#----------------------------------------------------------------------------
+def process_rental_return(shop, active_rentals):
+    """Looks up a rental, bills it, and puts the equipment back."""
+
+    print()
+    print("---------------- Rental Return ----------------")
+
+    customer_number = get_whole_number("Enter the customer number: ", 1)
+    active_rental = find_active_rental(active_rentals, customer_number)
+
+    if active_rental == None:
+        print()
+        print("No active rental was found for customer number", customer_number)
+        return
+
+    rental = active_rental.rental
+    length_word = get_length_word(rental.rental_period)
+
+    print()
+    print("Rental found for", rental.customer.name)
+    print("Estimated length was", active_rental.estimated_length, length_word)
+
+    actual_length = get_whole_number("How many " + length_word + " was the equipment actually rented? ", 1)
+
+    final_amount = display_price_details(active_rental, actual_length, "Final Invoice")
+
+    if active_rental.ski_count > 0:
+        shop.return_equipment("ski", active_rental.ski_count)
+    if active_rental.snowboard_count > 0:
+        shop.return_equipment("snowboard", active_rental.snowboard_count)
+
+    # the counts were already recorded at rental time, so only revenue is added
+    shop.record_rental(0, 0, final_amount)
+    active_rental.is_returned = True
+
+    print()
+    print("The return was completed.")
+    print("Amount collected:", format_money(final_amount))
+
+#----------------------------------------------------------------------------
 # Main
 #----------------------------------------------------------------------------
 print("----------------------------------")
@@ -290,7 +344,7 @@ while shop_is_open == True:
             next_customer_number = next_customer_number + 1
 
     elif menu_choice == 2:
-        print("Coming soon")
+        process_rental_return(shop, active_rentals)
 
     elif menu_choice == 3:
         show_inventory(shop)
