@@ -54,6 +54,17 @@ def get_menu_choice():
             print("Please enter 1, 2, 3, or 4.")
 
 #----------------------------------------------------------------------------
+# show_inventory
+#----------------------------------------------------------------------------
+def show_inventory(shop):
+    """Displays the equipment the shop has available right now."""
+
+    print()
+    print("---------------- Current Inventory ----------------")
+    print("Skis available:", shop.ski_available, "of", shop.ski_total)
+    print("Snowboards available:", shop.snowboard_available, "of", shop.snowboard_total)
+
+#----------------------------------------------------------------------------
 # Main
 #----------------------------------------------------------------------------
 print("----------------------------------")
@@ -85,7 +96,7 @@ while shop_is_open == True:
         print("Coming soon")
 
     elif menu_choice == 3:
-        print("Coming soon")
+        show_inventory(shop)
 
     elif menu_choice == 4:
         shop_is_open = False
