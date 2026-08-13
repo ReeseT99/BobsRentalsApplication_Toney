@@ -314,6 +314,20 @@ def process_rental_return(shop, active_rentals):
     print("Amount collected:", format_money(final_amount))
 
 #----------------------------------------------------------------------------
+# show_end_of_day
+#----------------------------------------------------------------------------
+def show_end_of_day(shop):
+    """Displays the totals for the day."""
+
+    print()
+    print("---------------- End of Day ----------------")
+    print("Skis rented today:", shop.skis_rented_today)
+    print("Snowboards rented today:", shop.snowboards_rented_today)
+    print("Total revenue collected:", format_money(shop.daily_revenue))
+    print()
+    print("Thank you for using Bob's Ski & Snowboard Rentals.")
+
+#----------------------------------------------------------------------------
 # Main
 #----------------------------------------------------------------------------
 print("----------------------------------")
@@ -350,4 +364,5 @@ while shop_is_open == True:
         show_inventory(shop)
 
     elif menu_choice == 4:
+        show_end_of_day(shop)
         shop_is_open = False
